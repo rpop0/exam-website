@@ -1,0 +1,64 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<title>LSPD Exam</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="icon" type="image/png" href="{%static 'main/images/uvt_logo.png'%}">
+	<link rel="stylesheet" href="{%static 'main/css/main.css'%}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="container format-box mt-3 mb-3">
+            <div class="container-fluid">
+                <div class="row no-gutter">
+                    <div class="col-md">
+                        <img class="ip-logo mt-3 mb-3" src="{%static 'main/images/uvt_logo.png'%}" alt="">
+                        <h2 id="ip-admin-text">West University of Timisoara Subject Examination.</h2>
+                        <p>This examination will assess all the knowledge you have gained so far from a specific course to your own study of the course materials provided to you. The examination will contain a variety of questions, designed to test your receptiveness to multiple areas.
+                        There is a few rules you <strong>must</strong> abide by when completing this exam:</p>
+                        <ul>
+                        <li>
+                            Never copy from another student's exam.
+                        </li>
+                        <li>
+                            Never allow another student to copy from your exam.
+                        </li>
+                        <li>
+                            Never fill out an exam for another student.
+                        </li>
+                        <li>
+                            Never arrange for someone other than yourself to take the exam in your place.
+                        </li>
+                        <li>
+                            Never disclose the contents of the document to any other person, student or entity (such as uploading the exam).
+                        </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>  
+            <div class="container-fluid">
+                <div class="row no-gutter h-auto">
+                    <div class="container">
+                        <br>
+                        <p>You are about to take the West University of Timisoara Subject Examination.</p>
+                        <a href="{% url 'exam-view' %}?data={{key}}" class="center-menu-button-nr">Start exam</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </form>
+    
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+    <div class="row no-gutter h-100">
+        <div class="col-lg-9 pr-5 pl-5 format-box-col">
+            <div class="format-box h-auto">
+
+                <div class="row no-gutter">
+                    <div class="col-md">
+                        <img class="ip-logo fade-in" src="{%static 'main/images/uvt_logo.png'%}" alt="">
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row no-gutter h-auto mt-2">
+                        <div class="col-xl-3 w-100">
+                            <div class="dash-info-box">
+                                <p class="dash-info-number">{{dashboardData|key:'points'}}</p>
+                                <p class="dash-info-details">Exams Returned</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 w-100">
+                            <div class="dash-info-box">
+                                <p class="dash-info-number">{{dashboardData|key:'users'}}</p>
+                                <p class="dash-info-details">Users</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 w-100">
+                            <div class="dash-info-box">
+                                <p class="dash-info-number">{{dashboardData|key:'tracker_entries'}}</p>
+                                <p class="dash-info-details">In progress Exams</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 w-100">
+                            <div class="dash-info-box">
+                                <p class="dash-info-number">{{dashboardData|key:'diipt'}}</p>
+                                <p class="dash-info-details">Total Exams</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid">
+
+                
+                    <div class="row no-gutter h-auto mt-2">
+                        <div class="col-xl-3 w-100">
+                            <div class="dash-info-box">
+                                <p class="dash-info-number">{{dashboardData|key:'exams'}}</p>
+                                <p class="dash-info-details">Exams Sent</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 w-100">
+                            <div class="dash-info-box">
+                                <p class="dash-info-number">{{dashboardData|key:'approved'}}</p>
+                                <p class="dash-info-details">Exams Failed</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 w-100">
+                            <div class="dash-info-box">
+                                <p class="dash-info-number">{{dashboardData|key:'denied'}}</p>
+                                <p class="dash-info-details">Exams Passed</p>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 w-100">
+                            <div class="dash-info-box">
+                                <p class="dash-info-number">{{dashboardData|key:'ridealong'}}</p>
+                                <p class="dash-info-details">Placeholder</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'main/right-bar.html' %}
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,54 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row no-gutter h-100">
+        <div class="col-lg-12 pr-5 format-users-box">
+            <div class="format-box h-auto mb-3">
+
+                <div class="row no-gutter">
+                    <div class="col-md">
+                        <a href="{% url 'exam-edit-exams' %}" id="center-menu-back-button" class="center-menu-button">Back</a>
+                        <img id="ip-logo-admin" class="ip-logo" src="{%static 'main/images/uvt_logo.png'%}" alt="">
+                            <h2 id="ip-admin-text">Editing Exam</h2>
+                            <button id="randomize-btn" class="center-menu-button-sm">Randomize</button>
+                        {% if messages %}
+                            {% for message in messages %}
+                                <p id='ip-admin-text'>{{message}}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row no-gutter h-auto">
+                        <div class="container" >
+                            <form method="POST">
+                                {% csrf_token %}
+                                {{form.exam_name|as_crispy_field}}
+                                <hr>
+                                <label class="d-flex justify-content-center"><h3>Multiple Choice</h3></label>
+                                {{form.questions_one|as_crispy_field}}
+                                <hr>
+                                <label class="d-flex justify-content-center"><h3>Open Response</h3></label>
+                                {{form.questions_two|as_crispy_field}}
+                                <hr>
+                                <button type="submit" class="center-menu-button-nr mb-2">Update exam</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'main/js/select-random.js' %}"></script>
+{% endblock javascript %}

@@ -1,0 +1,123 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<title>LSPD Exam</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="icon" type="image/png" href="{%static 'main/images/uvt_logo.png'%}">
+	<link rel="stylesheet" href="{%static 'main/css/main.css'%}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="container format-box mt-3 pb-1 mb-3">
+            <div class="container-fluid">
+                <div class="row no-gutter">
+                    <div class="container">
+                        <div class="col-md">
+                            <img class="ip-logo mt-3 mb-3" src="{%static 'main/images/uvt_logo.png'%}" alt="">
+                            <h2 id="ip-admin-text">Los Santos Police Department Examination</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            <div class="container-fluid">
+                <div class="row no-gutter h-auto">
+                    <div class="container">
+                        <div class="col-md">
+                            <br>
+                            <ol>
+                                <h4 style="margin-left: -40px !important;" class="text-center">Principle, Policy, and Structure</h4>
+                                {% for question in questions_one %}
+                                        <li>
+                                            <p></p>{{question}} ({{question.point_value}} pts.)</p>
+                                            <ul style="list-style-type:none;">
+                                                {% if question.question_type == 0 %}
+                                                <div class="checkbox-group required"> 
+                                                    {% else%}
+                                                <div class="radio-group required">  
+                                                {% endif %}
+                                                    {% for answer in question.answer_set.all %}
+                                                        <li>
+                                                            <label>
+                                                                {% if question.question_type == 0 %}
+                                                                    <input name="{{question.id}}" type="checkbox" value="{{answer.answer}}">
+                                                                {%else%}
+                                                                    <input name="{{question.id}}" type="radio" value="{{answer.answer}}">
+                                                                {% endif %}
+                                                                {{answer.answer}}
+                                                            </label>
+                                                        </li>
+                                                    {% endfor %}
+                                                </div>
+                                            </ul>
+                                        </li>
+                                {% endfor %}
+                                <hr>
+                                <h4 style="margin-left: -40px !important;" class="text-center">Open answer</h4>
+                                {% for question in questions_two %}
+                                    <li>{{question}} ({{question.point_value}} pts.)</li>
+                                    <br>
+                                    <textarea required name="{{question.id}}" style="width: 100%; height: 15vw;"></textarea>
+                                    <br>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <button id="submit" type="submit" class="center-menu-button-nr">Submit exam</button>
+            
+        </div>
+
+    </form>
+    
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
+<script>
+    $("#submit").click(function(e) {
+
+        var complete = true;
+        var incomplete_group;
+        
+        $('div.checkbox-group.required').each(function(i) {
+
+            if($(this).find("input[type=checkbox]:checked").length == 0){
+                complete = false;
+                $(this).find("label").addClass("exam-field-empty");
+                incomplete_group = $(this);
+            }
+            
+        });
+
+        $('div.radio-group.required').each(function(i) {
+
+            if($(this).find("input[type=radio]:checked").length == 0){
+                complete = false;
+                $(this).find("label").addClass("exam-field-empty");
+                incomplete_group = $(this);
+            }
+
+        });
+
+        if(complete == false){
+            e.preventDefault()
+            $([document.documentElement, document.body]).animate({
+                scrollTop: incomplete_group.closest("li").offset().top
+            }, 1000);
+            
+        }
+
+    });
+    
+</script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+<script src="{% static 'main/js/exam-save-answers.js'  %}"></script>
+</body>
+</html>

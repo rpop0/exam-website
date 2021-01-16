@@ -1,0 +1,53 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row no-gutter h-100">
+        <div class="col-lg-12 pr-5 format-users-box">
+            <div class="format-box h-auto">
+
+                <div class="row no-gutter">
+                    <div class="col-md">
+                        <a href="{% url 'main-admin-invite' %}" id="center-menu-back-button" class="center-menu-button">Back</a>
+                        <img id="ip-logo-admin" class="ip-logo" src="{%static 'main/images/uvt_logo.png'%}" alt="">
+                        <h2 id="ip-admin-text">Invitation list</h2>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row no-gutter h-auto">
+                        <div class="table-responsive" style="margin-left: 1em; margin-right:1em">
+                            <table id="userTable" class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">First name</th>
+                                    <th scope="col">Last name</th>
+                                    <th scope="col">Key</th>
+                                    <th scope="col">Rank</th>
+                                    <th scope="col">Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    {% for entry in key_list %}
+                                        <tr>
+                                            <th scope="row">{{entry.id}}</th>
+                                            <td>{{entry.first_name}}</td>
+                                            <td>{{entry.last_name}}</td>
+                                            <td>{{entry.key}}</td>
+                                            <td>{{entry.position|position_translate}}</td>
+                                            <td><a class="center-menu-button-sm button-danger" id="table-button" href="{% url 'main-admin-invite-delete' entry.id %}">Delete</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

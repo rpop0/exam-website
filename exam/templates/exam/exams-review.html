@@ -1,0 +1,137 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+
+{% block content %}
+
+
+<div class="row no-gutter h-100 pb-5">
+	<div class="col-lg-12 pr-5 pl-5 format-box-col">
+		<div class="format-box h-auto container">
+
+			<div class="row no-gutter">
+				<div class="col-md">
+					{% if not exam.archived %}
+						<a href="{% url 'exams-view' %}" id="center-menu-back-button" class="center-menu-button">Back</a>
+					{% else %}
+						<a href="{% url 'exam-manage-exams' %}" id="center-menu-back-button" class="center-menu-button">Back</a>
+					{% endif %}
+					<img class="ip-logo fade-in" src="{%static 'main/images/uvt_logo.png'%}" alt="">
+					<h2 id="ip-admin-text">Exam of {{exam.first_name}} {{exam.last_name}} ({{exam.points|add:exam.points_open_response}}/50)</h2>
+					<span id="review-grade" style="display: none;">{{exam.points|add:exam.points_open_response}}</span>
+					<hr>
+				</div>
+			</div>
+			<div class="row no-gutter h-auto">
+				<form method="POST" class="w-100">
+					{% csrf_token %}
+					<div class="container-fluid">
+						<ol class="pl-0">
+							<div class="container-fluid">
+								{% for response in exam.response_set.all%}
+									{% if response.question.question_type == 2 %}
+										<li>Applicant answer: </li>
+										<p style="white-space: pre-wrap;">{{response.open_response}}</p>
+											<p>
+											<button class="blue-btn" type="button" data-toggle="collapse" data-target="#{{forloop.counter}}" aria-expanded="false" aria-controls="collapseExample">
+												View Question
+											</button>
+											<button class="blue-btn" type="button" data-toggle="collapse" data-target="#key-{{forloop.counter}}" aria-expanded="false" aria-controls="collapseExample">
+												View Marking Key
+											</button>
+										</p>
+
+										<div class="collapse" id="{{forloop.counter}}">
+											<div class="card card-body" style="white-space: pre-wrap;">{{response.question}}</div>
+										</div>
+										<div class="collapse" id="key-{{forloop.counter}}">
+											<div class="mt-1 card card-body" style="white-space: pre-wrap;">{{response.answer.answer}}</div>
+										</div>
+
+										{% if user == exam.handler or user.staff or user.admin %}
+											{% if not exam.archived %}
+												{% if response.open_response|default:""|slice:"-1:" == "S" %}
+													<label class="d-block mt-5">Marking:</label>
+													<textarea name="review-{{response.id}}" style="width: 100%; height: 7vw;">{{response.review}}</textarea>
+
+													<label class="d-block mt-3">Total points (Out of 3):</label>
+													<input class="point-input" min="0", max="3" type="number" name="points-{{response.id}}" value="{{response.open_response_points}}">
+												{% else %}
+													<label class="d-block mt-5">Marking:</label>
+													<textarea name="review-{{response.id}}" style="width: 100%; height: 12vw;">{{response.review}}</textarea>
+
+													<label class="d-block mt-3">Total points (Out of 20):</label>
+													<input class="point-input" min="0", max="20" type="number" name="points-{{response.id}}" value="{{response.open_response_points}}">
+												{%endif%}
+											{% else %}
+												{% if response.open_response|default:""|slice:"-1:" == "S" %}
+												<label class="d-block mt-5">Marking:</label>
+												<textarea disabled name="review-{{response.id}}" style="width: 100%; height: 7vw;">{{response.review}}</textarea>
+
+												<label class="d-block mt-3">Total points (Out of 3):</label>
+												<input disabled class="point-input" min="0", max="3" type="number" name="points-{{response.id}}" value="{{response.open_response_points}}">
+											{% else %}
+												<label class="d-block mt-5">Marking:</label>
+												<textarea disabled name="review-{{response.id}}" style="width: 100%; height: 12vw;">{{response.review}}</textarea>
+
+												<label class="d-block mt-3">Total points (Out of 20):</label>
+												<input disabled class="point-input" min="0", max="20" type="number" name="points-{{response.id}}" value="{{response.open_response_points}}">
+											{%endif%}
+											{% endif %}
+										{% else %}
+											{% if response.open_response|default:""|slice:"-1:" == "S" %}
+												<label class="d-block mt-5">Marking:</label>
+												<textarea disabled name="review-{{response.id}}" style="width: 100%; height: 7vw;">{{response.review}}</textarea>
+
+												<label class="d-block mt-3">Total points (Out of 3):</label>
+												<input disabled class="point-input" min="0", max="3" type="number" name="points-{{response.id}}" value="{{response.open_response_points}}">
+											{% else %}
+												<label class="d-block mt-5">Marking:</label>
+												<textarea disbled name="review-{{response.id}}" style="width: 100%; height: 12vw;">{{response.review}}</textarea>
+
+												<label class="d-block mt-3">Total points (Out of 20):</label>
+												<input disabled class="point-input" min="0", max="20" type="number" name="points-{{response.id}}" value="{{response.open_response_points}}">
+										{%endif%}
+										{% endif %}
+										<hr>
+									{% endif %}
+								{% endfor %}
+
+						
+								<h1 class="d-flex justify-content-center">Overall statistics</h1>
+
+								<p class="text-center">During this exam, the applicant gathered <i class="compute-final">{{exam.points}}</i> on the multiple choice answers and <i class="compute-final" id="total_points"></i> points in open responses</p>
+								<p id="final-grade" class="text-center">Final grade :</p>
+								<input name="final-grade" id="final-grade-input" type="hidden">
+								{% if not exam.marked %}
+									{% if user == exam.handler or user.staff or user.admin %}
+										{% if not exam.archived %}
+											<button name="mark" class='blue-btn ml-auto mr-auto d-block mt-3' type="submit">Submit marking</button>
+										{% endif %}
+									{% endif %}
+								{% else %}
+									{% if user == exam.handler or user.staff or user.admin %}
+										{% if not exam.archived %}
+											<center>
+												<button name="pass" class='center-menu-button-nr d-inline ' type="submit">Pass</button>
+												<button name="fail" class='center-menu-button-nr d-inline button-danger' type="submit">Fail</button>
+											</center>
+										{% endif %}
+									{% endif %}
+								{% endif %}
+
+							</div>
+						</ol>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'main/js/compute-points.js'  %}"></script>
+{% endblock %}

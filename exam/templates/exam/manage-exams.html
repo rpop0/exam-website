@@ -1,0 +1,48 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+
+{% block content %}
+
+
+<div class="row no-gutter h-100">
+	<div class="col-lg-9 pr-5 pl-5 format-box-col">
+		<div class="format-box h-auto">
+
+			<div class="row no-gutter">
+				<div class="col-md">
+                    <a href="{% url 'main-admin' %}" id="center-menu-back-button" class="center-menu-button">Back</a>
+					<img id="ip-logo-admin" class="ip-logo fade-in" src="{%static 'main/images/uvt_logo.png'%}" alt="">
+					<h2 id="ip-admin-text">Manage Exams</h2>
+				</div>
+			</div>
+			<div class="row no-gutter h-auto">
+				<div class="col-lg-4 w-100">
+					{% if user.senior and not user.staff and not user.admin and not user.is_admin %}
+						<button disabled class="center-menu-button">Edit Exams</button>
+						<button disabled  class="center-menu-button">Edit Questions</button>
+					{% else %}
+						<a href="{% url 'exam-edit-exams' %}" class="center-menu-button">Edit Exams</a>
+						<a href="{% url 'exam-edit-questions' %}" class="center-menu-button">Edit Questions</a>
+					{% endif %}
+				</div>
+				
+				<div class="col-lg-4 w-100">
+					<a href="{% url 'exam-active' %}" class="center-menu-button">Active Exams</a>
+					<a href="{% url 'exam-archive' %}" class="center-menu-button">Exam Archive</a>
+				</div>
+				<div class="col-lg-4 w-100">
+					<a href="#" class="center-menu-button">Placeholder</a>
+					<a href="#" class="center-menu-button">Placeholder 1</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include 'main/right-bar.html' %}
+</div>
+
+
+
+
+{% endblock content %}

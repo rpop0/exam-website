@@ -1,0 +1,42 @@
+from django.urls import path
+from exam.views import (
+    ManageExamsView,
+    EditQuestionsListView,
+    EditQuestionsUpdateView,
+    EditQuestionsDeleteView,
+    ManageAnswersListView,
+    ManageAnswersUpdateView,
+    ManageAnswersDeleteView,
+    EditExamsListView,
+    EditExamsUpdateView,
+    EditExamsDeleteView,
+    EditExamsDetailView,
+    ExamFormView,
+    ActiveExamsListView,
+    PreExamTemplateView,
+    ExamsListView,
+    ExamReviewDetailView,
+    ArchivedExamsListView,
+    PostExamTemplateView
+    )
+
+urlpatterns = [
+    path("", ExamFormView.as_view(), name='exam-view'),
+    path("notice/", PreExamTemplateView.as_view(), name='exam-notice'),
+    path("done", PostExamTemplateView.as_view(), name='exam-done'),
+    path('manage/', ManageExamsView.as_view(), name='exam-manage-exams'),
+    path('manage/questions', EditQuestionsListView.as_view(), name='exam-edit-questions'),
+    path('manage/questions/<int:pk>/update/', EditQuestionsUpdateView.as_view(), name='exam-edit-questions-update'),
+    path('manage/questions/<int:pk>/delete/', EditQuestionsDeleteView.as_view(), name='exam-edit-questions-delete'),
+    path('manage/questions/<int:pk>/answers/', ManageAnswersListView.as_view(), name='exam-manage-answers'),
+    path('manage/questions/<int:pk>/answers/<int:aid>/update/', ManageAnswersUpdateView.as_view(), name='exam-manage-answers-update'),
+    path('manage/questions/<int:pk>/answers/<int:aid>/delete/', ManageAnswersDeleteView.as_view(), name='exam-manage-answers-delete'),
+    path('manage/exams/', EditExamsListView.as_view(), name='exam-edit-exams'),
+    path('manage/exams/<int:pk>/update/', EditExamsUpdateView.as_view(), name='exam-edit-exams-update'),
+    path('manage/exams/<int:pk>/delete/', EditExamsDeleteView.as_view(), name='exam-edit-exams-delete'),
+    path('manage/exams/<int:pk>/view/', EditExamsDetailView.as_view(), name='exam-edit-exams-view'),
+    path('manage/active/', ActiveExamsListView.as_view(), name='exam-active'),
+    path('manage/archive/', ArchivedExamsListView.as_view(), name='exam-archive'),
+    path('list', ExamsListView.as_view(), name='exams-view'),
+    path('list/<int:pk>/view', ExamReviewDetailView.as_view(), name='exams-review'),
+]

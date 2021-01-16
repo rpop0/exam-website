@@ -1,0 +1,67 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<form method="POST">
+    {% csrf_token %}
+  
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                {{ form.username|as_crispy_field }}
+              </div>								
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                {{ form.first_name|as_crispy_field }}
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="form-group">
+                {{ form.last_name|as_crispy_field }}
+            </div>								
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                {{ form.password1|as_crispy_field }}
+            </div>								
+        </div>
+        <div class="col">
+            <div class="form-group">
+                {{ form.password2|as_crispy_field }}
+             </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                {{ form.email|as_crispy_field }}
+            </div>								
+        </div>
+    </div> 
+
+  
+
+
+
+  <div class="form-group">
+    {{ form.key|as_crispy_field }}
+  </div>
+  <button type="submit" class="blueButton mt-2 mb-2">Sign up</button>
+  <div class="container">
+    <small>Already have an account? <a href="{% url 'login' %}">Log in</a></small>
+</div>
+</form>
+
+{% endblock content%}

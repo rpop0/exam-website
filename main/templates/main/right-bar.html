@@ -1,0 +1,32 @@
+{% load static %}
+{% load custom_filters %}
+ 
+<div class="col-lg-3 pr-5 pl-5 format-right-box-col h-100">
+    <div class="row no-gutter format-right-box">
+        <div class="col-lg">
+            <h2 class="time digital-clock hidden">16:21</h2>
+            <h4 class="date clock-date hidden">( ͡° ͜ʖ ͡°) What are you doing here?</h4>
+            <hr>
+            <div>
+                <h5 class="text-center">{{user.first_name}} {{user.last_name}}</h5>
+                <p class="text-center mb-0">{{user.position|position_translate}}</p>
+                <hr>
+            </div>
+            <div>
+                <h5 class="text-center">Stats for {{current_month}}, {{current_year}}</h5>
+                <p class="text-center">Total exams handled: 0</p>
+                <hr>
+            </div>
+            <div>
+                <h5 class="text-center">Useful links</h5>
+                <p class="text-center mb-1"><a href="#">Placeholder 1</a></p>
+                <p class="text-center mb-1"><a href="#7">Placeholder 2</a></p>
+                <p class="text-center mb-1"><a href="#">Placeholder 3</a></p>
+                <p class="text-center mb-1"><a href="#">Placeholder 4</a></p>
+                <p class="text-center mb-1"><a href="#">Placeholder 5</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'main/js/clock.js' %}" defer="defer"></script>

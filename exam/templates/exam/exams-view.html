@@ -1,0 +1,112 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+
+{% block content %}
+
+
+<div class="row no-gutter h-100">
+	<div class="col-lg-12 pr-5 pl-5 format-box-col">
+		<div class="format-box h-auto container-fluid">
+
+			<div class="row no-gutter">
+				<div class="col-md">
+					<img class="ip-logo fade-in" src="{%static 'main/images/uvt_logo.png'%}" alt="">
+					<h2 id="ip-admin-text">Active exams</h2>
+					<hr>
+				</div>
+			</div>
+			<div class="row no-gutter h-auto">
+				<div class="table-responsive" style="margin-left: 1em; margin-right:1em">
+					<table id="activeExamsTable" class="table table-striped table-bordered table-sm"> 
+						<thead>
+							<tr>
+								<th scope="col">Name</th>
+								<th scope="col">Date sent</th>
+								<th scope="col">Marked by</th>
+								<th scope="col">Status</th>
+								<th scope="col">Handler</th>
+								<th scope="col">Points</th>
+								<th scope="col">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% if exam_list %}
+								{% for exam in exam_list %}
+									{% if exam.handler == user and not exam.reviewed %}
+									<tr style="background-color: #e5fae8;"">
+									{% else %}
+									<tr>
+									{% endif %}
+										<td>{{exam.first_name}} {{exam.last_name}}</td>
+										<td>{{exam.date_sent}}</td>
+										<td>{{exam.marked_by}}</td>
+										{% if not exam.turned_in %}
+											{% if exam.expired %}
+												<td style="font-weight: bold; color: red;">Expired</td>
+											{% else %}
+												<td>In progress</td>
+											{% endif %}
+										{% elif not exam.marked %}
+											<td style="font-weight: bold; color: orange;">To be marked</td>
+										{% elif exam.marked and not exam.reviewed%}
+											<td style="font-weight: bold; color: orange;">Pending review</td>
+										{% elif exam.reviewed and exam.passed%}
+											<td style="font-weight: bold; color: green;">Passed</td>
+										{% else %}
+											<td style="font-weight: bold; color: red;">Failed</td>
+										{% endif %}
+										{% if exam.handler and exam.turned_in %}
+											<td>{{exam.handler.first_name}} {{exam.handler.last_name}}</td>
+										{% else %}
+											<td>None</td>
+										{% endif %}
+										{% if exam.turned_in %}
+											<td>{{exam.points|add:exam.points_open_response}}/100</td>
+										{% else %}
+											<td>Not turned in</td>
+										{% endif %}
+										<td style="text-align: center;" class="small-actions-col">
+											<div class="btn-group">
+												<form method="POST">
+													{% csrf_token %}
+													{% if not exam.handler and exam.turned_in and not exam.marked %}
+														<button name="handle" value="{{exam.key}}" type="submit" class="center-menu-button-sm" id="table-button">Handle</button>
+													{% elif not exam.handler and exam.marked and not exam.reviewed  %}
+														{% if user.senior or user.admin or user.staff %}
+															<button name="handle" value="{{exam.key}}" type="submit" class="center-menu-button-sm" id="table-button">Handle</button>
+														{% endif %}
+													{% elif exam.handler == user and exam.turned_in and not exam.reviewed%}
+														<button name="unhandle" value="{{exam.key}}" type="submit" class="center-menu-button-sm" id="">Un-handle</button>
+													{% endif %}
+												</form>
+												{% if exam.turned_in %}
+													<a href="{% url 'exams-review' exam.id %}" class="center-menu-button-sm ml-1" id="">View</a>
+												{% endif %}
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+							{% endif %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+{% block datatable %}
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script>
+	$(document).ready(function() {
+        $('#activeExamsTable').DataTable({
+			"aaSorting": [],
+			"iDisplayLength": 50
+        });
+} );
+</script>
+{% endblock datatable %}

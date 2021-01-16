@@ -1,0 +1,49 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+
+
+{% block content %}
+
+
+<div class="row no-gutter h-100">
+	<div class="col-lg-9 pr-5 pl-5 format-box-col">
+		<div class="format-box h-auto container">
+
+			<div class="row no-gutter">
+				<div class="col-md">
+					<img id="ip-logo-admin" class="ip-logo fade-in" src="{%static 'main/images/uvt_logo.png'%}" alt="">
+					<h2 id="ip-admin-text">Administration Panel</h2>
+				</div>
+			</div>
+			<div class="row no-gutter h-auto">
+				<div class="col-lg-6 w-100">
+					<a href="#" class="center-menu-button">Placeholder</a>
+					{% if not user.admin and not user.is_staff and not user.staff  %}
+						<button class="center-menu-button" disabled>Manage users</button>
+					{% elif user.staff and not user.admin %}
+						<button class="center-menu-button" disabled>Manage users</button>
+					{% else %}
+						<a href="{% url 'main-admin-manage-users' %}" class="center-menu-button">Manage users</a>
+					{% endif %}
+				</div>
+				
+				<div class="col-lg-6 w-100">
+					{% if not user.admin and not user.is_staff and not user.staff  %}
+						<button disabled class="center-menu-button">Invite user</button>
+					{% else %}
+						<a href="{% url 'main-admin-invite' %}" class="center-menu-button">Invite user</a>
+					{% endif %}
+
+					<a href="{% url 'exam-manage-exams' %}" class="center-menu-button">Manage Exams</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include 'main/right-bar.html' %}
+</div>
+
+
+
+
+{% endblock content %}

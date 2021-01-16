@@ -1,0 +1,127 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Exam Panel</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="icon" type="image/png" href="{%static 'main/images/uvt_logo.png'%}">
+	<link rel="stylesheet" href="{%static 'main/css/main.css'%}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+</head>
+<body>
+
+	<nav class="navbar navbar-custom navbar-dark navbar-expand-lg">
+	  <a class="navbar-brand" href="{% url 'main-dashboard' %}">
+	    <img src="{%static 'main/images/uvt_logo.png'%}" width="50" height="50" alt="">
+	  </a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    	<span class="navbar-toggler-icon"></span>
+	  </button>
+
+	  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+	  	<span class="navbar-text mr-auto redtext">
+		  West University of Timisoara
+		</span>
+
+	  	<ul class="navbar-nav ml-auto" >
+	  		<li class="nav-item dropdown">
+	  			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          {{ user.username }}
+		        </a>
+		        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+					<a class="dropdown-item" href="#">Profile</a>
+					{% if user.red_rank >= 6 or user.is_staff %}
+                    	<a class="dropdown-item" href="{% url 'users-manage-settings' user.id %}">Settings</a>
+					{% else %}
+						<a class="dropdown-item" href="{% url 'users-settings' user.id %}">Settings</a>
+					{% endif %}
+		          	<a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
+		        </div>
+	  		</li>
+	  	</ul>
+	  </div>
+	</nav>
+
+	
+	<div class="container-fluid main-page h-100">
+		<div class="row no-gutter h-100">
+			<div class="col-md-2">
+				<div id="sideBar">
+					<ul class="sideList">
+						<li id="firstButton">
+							<a href="{% url 'main-dashboard' %}" class="sideButtons">
+								{% if page == "dashboard" %}
+									<div class="icon side-selected">
+										<i class="fas fa-tachometer-alt"></i>
+									</div>
+								{% else %}
+									<div class="icon">
+										<i class="fas fa-tachometer-alt"></i>
+									</div>
+								{% endif %}
+								<div class="name">Dashboard</div>
+							</a>
+						</li>
+						<li>
+							<a href="{% url 'exams-view'%}" class="sideButtons">
+								{% if page == "exams" %}
+									<div class="icon side-selected">
+										<i class="fas fa-book-open"></i>
+									</div>
+								{% else %}
+									<div class="icon">
+										<i class="fas fa-book-open"></i>
+									</div>
+								{% endif %}
+								<div class="name">Exams</div>
+							</a>
+						</li>
+
+						{% if user.staff or user.admin or user.is_staff or user.senior %}
+						<li>
+							<a href="{% url 'main-admin' %}" class="sideButtons">
+								{% if page == "admin" %}
+									<div class="icon side-selected">
+										<i class="fas fa-user-cog"></i>
+									</div>
+								{% else %}
+									<div class="icon">
+										<i class="fas fa-user-cog"></i>
+									</div>
+								{% endif %}
+
+								<div class="name">Administration page</div>
+							</a>
+						</li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-10">
+
+                {% block content %} {% endblock %}
+			</div>
+		</div>
+		
+	</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+{% block javascript %}
+{% endblock javascript %}
+
+
+{% block datatable %}
+{% endblock datatable %}
+
+
+
+</body>
+</html>

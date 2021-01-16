@@ -1,0 +1,58 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row no-gutter h-100">
+        <div class="col-lg-12 pr-5 format-users-box">
+            <div class="format-box h-auto">
+
+                <div class="row no-gutter">
+                    <div class="col-md">
+                        <a href="{% url 'exam-edit-exams' %}" id="center-menu-back-button" class="center-menu-button">Back</a>
+                        <img id="ip-logo-admin" class="ip-logo" src="{%static 'main/images/uvt_logo.png'%}" alt="">
+                        <h2 id="ip-admin-text">Visualizing {{exam.exam_name}}</h2>
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="row no-gutter h-auto">
+                        <div class="container">
+                            <hr>
+                            <ol>
+                                <h4 class="text-center">Multiple Choice</h4>
+                                {% for question in exam.questions_one.all %}
+                                    <li>
+                                        <a class='cool-anchor' href="{% url 'exam-edit-questions-update' question.id %}" target="_blank">{{question}} ({{question.point_value}} pts.)</a>
+                                        <ul>
+                                        {% for answer in question.answer_set.all %}
+                                            <a class='cool-anchor' href="{% url 'exam-manage-answers-update' pk=question.id aid=answer.id %}" target="_blank">
+                                                {% if answer.correct %}
+                                                    <li style="font-weight: bold; color:green;">{{answer.answer}}</li>
+                                                {% else %}
+                                                    <li>{{answer.answer}}</li>
+                                                {% endif %}
+                                            </a>
+                                        {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                                <hr>
+                                <h4 class="text-center">Open Answers</h4>
+                                {% for question in exam.questions_two.all %}
+                                <a class='cool-anchor' href="{% url 'exam-edit-questions-update' question.id %}" target="_blank">
+                                    <li>
+                                        {{question}} ({{question.point_value}} pts.)
+                                    </li>
+                                </a>
+                                    <br>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
